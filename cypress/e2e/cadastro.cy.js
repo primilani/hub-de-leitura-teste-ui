@@ -20,7 +20,7 @@ describe('Funcionalidade: Cadastro no Hub de Leitura', () => {
         cy.get('#confirm-password').type('Senha@123')
         cy.get('#terms-agreement').check() // Tambem da certo com 'Click'
         cy.get('#register-btn').click()
-    // Rsultado esperado
+        // Rsultado esperado
         cy.url().should('include', 'dashboard')
     });
 
@@ -34,8 +34,21 @@ describe('Funcionalidade: Cadastro no Hub de Leitura', () => {
         cy.get('#confirm-password').type('Senha@123')
         cy.get('#terms-agreement').check() // Tambem da certo com 'Click'
         cy.get('#register-btn').click()
-    // Rsultado esperado
+        // Rsultado esperado
         cy.url().should('include', 'dashboard')
         cy.get('#user-name').should('contain', nome)
+    });
+
+    it.only('Deve preencher cadastro com sucesso - Usando comando customizado', () => {
+        let email = `teste${Date.now()}@teste.com`
+        let nome = faker.person.fullName({sex:"female"})
+        cy.preencherCadastro(
+            nome,
+            email,
+            '5138698567',
+            'Teste@123',
+            'Teste@123'
+        )
+        cy.url().should('include', 'dashboard')
     });
 });
