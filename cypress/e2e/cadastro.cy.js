@@ -4,11 +4,12 @@
 // Biblioteca do cypress
 /// <reference types="cypress"/> 
 import { faker, Faker } from "@faker-js/faker";  // Biblioteca para dados fakes
+import cadastroPage from "../support/pages/cadastro-page";
 
 describe('Funcionalidade: Cadastro no Hub de Leitura', () => {
 
     beforeEach(() => {
-        cy.visit('register.html')
+        cadastroPage.visitarPaginaCadastro()
     });
 
     it('Deve fazer cadastro com sucesso , usando funcao JS', () => {
@@ -39,9 +40,9 @@ describe('Funcionalidade: Cadastro no Hub de Leitura', () => {
         cy.get('#user-name').should('contain', nome)
     });
 
-    it.only('Deve preencher cadastro com sucesso - Usando comando customizado', () => {
+    it('Deve preencher cadastro com sucesso - Usando comando customizado', () => {
         let email = `teste${Date.now()}@teste.com`
-        let nome = faker.person.fullName({sex:"female"})
+        let nome = faker.person.fullName({ sex: "female" })
         cy.preencherCadastro(
             nome,
             email,
@@ -51,4 +52,28 @@ describe('Funcionalidade: Cadastro no Hub de Leitura', () => {
         )
         cy.url().should('include', 'dashboard')
     });
+
+    //M.12 - A.4 - Page Objects
+
+    it('Deve fazer cadastro com sucesso usando Page Objects', () => {
+        let email = `teste${Date.now()}@teste.com`
+        cadastroPage.preencherCadastro('Priscila Milani', email, '5138698567', 'pri@123', 'pri@123')
+        cy.url().should('include', 'dashboard')
+    });
+
+    it('Deve validar mensagem ao tentar cadastrar, sem preencher nome', () => {
+        let email = faker.internet.email()
+        cadastroPage.preencherCadastro('', email, '5133448672', 'Teste@teste1', 'Teste@teste1')
+        cy.get(':nth-child(1) > .invalid-feedback').should('contain', 'Nome deve ter pelo menos 2 caracteres')
+    });
+
+    it.only('Deve validar mensagem de senha fraca', () => {
+        let email = faker.internet.email()
+        let nome = faker.person.fullName()
+        cadastroPage.preencherCadastro(nome, email, '5133448672', 't1', 't1')
+        cy.get('#password-feedback').should('contain', 'Senha fraca - use letras maiúsculas e números')
+    });
+
+
+    //cy.get(':nth-child(1) > .invalid-feedback').should('contain', 'Nome deve ter pelo menos 2 caracteres')
 });

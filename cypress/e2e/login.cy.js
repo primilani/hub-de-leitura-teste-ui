@@ -2,10 +2,11 @@
 
 ///<reference types="cypress"/>
 import user from "../fixtures/usuario.json"
+import loginPage from "../support/pages/login-page";
 
 describe('Funcionalidade: Login', () => {
   beforeEach(() => {
-    cy.visit('index.login');
+    loginPage.visitarPaginaLogin()
   });
 
   it('Deve fazer login com sucesso', () => {
@@ -24,10 +25,14 @@ describe('Funcionalidade: Login', () => {
   });
 
 // M.12 - A.2 - Massa de dados em arquivo
-it.only('Deve fazer login com sucesso, usando importação de massa de dados', () => {
+it('Deve fazer login com sucesso, usando importação de massa de dados', () => {
      cy.login(user.email, user.senha)
   });
 
+// Login importando da classe LoginPage
+it.only('Deve fazer login, utilizando a LoginPage', () => {
+  loginPage.preencherLogin('usuario@teste.com', 'user123')
+});
 
 
 });
