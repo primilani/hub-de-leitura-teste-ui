@@ -9,6 +9,10 @@ describe('Funcionalidade: Busca no catálogo', () => {
         catalogoPage.acessarCatalogo()
     });
 
+    afterEach(()=> { //tirar print de todos os testes
+        cy.screenshot()
+    })
+
     it('Deve fazer a busca do livro 1984 com sucesso', () => {
         cy.get('#search-input').type('1984')
         cy.get('.card-title').should('contain', '1984')
@@ -63,10 +67,4 @@ describe('Funcionalidade: Busca no catálogo', () => {
         catalogoPage.pesuisaCodigo('978-85-AUTO-0015-0') //livro a metamorfose
         
     });
-
-
-
-
-
-
 });

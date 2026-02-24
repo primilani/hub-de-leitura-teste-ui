@@ -26,6 +26,6 @@ class CadastroPage {
         this.checkTermos().check()
         this.botaoCriarConta().click()
     }
-}
 
+}
 export default new CadastroPage()
